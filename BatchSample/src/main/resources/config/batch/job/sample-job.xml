@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/batch"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:batch="http://www.springframework.org/schema/batch"
+	 xmlns:context="http://www.springframework.org/schema/context"
+	 xmlns:tx="http://www.springframework.org/schema/tx"
+	 xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+     xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<job id="sampleJob1">
+		<step id="sampleJobStep1" next="samleJobStep2">
+			<tasklet ref="sampleJobTasklet1" />
+		</step>
+		<step id="samleJobStep2">
+			<tasklet ref="sampleJobTasklet2" />
+		</step>
+	</job>
+
+	<!-- Tasklet -->
+	<beans:bean id="sampleJobTasklet1" class="sample.batch.tasklet.SampleTasklet1" scope="step" />
+	<beans:bean id="sampleJobTasklet2" class="sample.batch.tasklet.SampleTasklet2" scope="step" />
+
+	<beans:bean id="jobRepository" class="org.springframework.batch.core.repository.support.JobRepositoryFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="transactionManager" ref="transactionManager" />
+	</beans:bean>
+
+	<!-- 스프링 배치 job을 실행하는 빈. -->
+	<beans:bean id="jobLauncher"	class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<beans:property name="jobRepository" ref="jobRepository" />
+	</beans:bean>
+
+	<beans:bean name="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<beans:property name="driverClassName" value="org.h2.Driver" />
+		<beans:property name="url" value="jdbc:h2:mem:test;MODE=Oracle" />
+		<beans:property name="username" value="sa" />
+		<beans:property name="password" value="" />
+	</beans:bean>
+
+	<beans:bean name="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+
+	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+		lazy-init="true">
+		<beans:property name="sessionFactory" ref="sessionFactory" />
+	</beans:bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<jdbc:initialize-database data-source="dataSource">
+		<jdbc:script location="org/springframework/batch/core/schema-drop-h2.sql" />
+		<jdbc:script location="org/springframework/batch/core/schema-h2.sql" />
+	</jdbc:initialize-database>
+
+	<beans:bean id="jobLauncherTestUtils" class="org.springframework.batch.test.JobLauncherTestUtils" />
+
+</beans:beans>
