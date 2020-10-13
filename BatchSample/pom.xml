@@ -11,7 +11,7 @@
 	<properties>
 		<spring.batch.version>4.1.2.RELEASE</spring.batch.version>
 		<spring.version>5.1.9.RELEASE</spring.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 		
 		<hibernate.version>5.4.4.Final</hibernate.version>
 		<apache.dbcp2.version>2.7.0</apache.dbcp2.version>
