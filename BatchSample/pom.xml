@@ -15,7 +15,7 @@
 		
 		<hibernate.version>5.4.4.Final</hibernate.version>
 		<apache.dbcp2.version>2.7.0</apache.dbcp2.version>
-		<h2.version>1.4.199</h2.version>
+		<h2.version>2.0.206</h2.version>
 	</properties>
 	<dependencies>
 		<dependency>
