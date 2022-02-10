@@ -13,7 +13,7 @@
 		<spring.version>5.1.9.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		
-		<hibernate.version>5.4.4.Final</hibernate.version>
+		<hibernate.version>5.4.24.Final</hibernate.version>
 		<apache.dbcp2.version>2.7.0</apache.dbcp2.version>
 		<h2.version>1.4.199</h2.version>
 	</properties>
